@@ -12,7 +12,18 @@ const SAMPLE_COVERS = [
 let COVERS = SAMPLE_COVERS.slice();
 let usingSamples = true;
 
-const genreLabel = (g) => (g ? g.charAt(0).toUpperCase() + g.slice(1) : "");
+const GENRE_LABELS = {
+  christian: "Christian",
+  romance: "Romance",
+  fantasy: "Fantasy",
+  horror: "Horror",
+  crime: "Crime",
+  thriller: "Thriller",
+  mystery: "Mystery",
+  "self-help": "Self-Help",
+  memoir: "Memoir"
+};
+const genreLabel = (g) => GENRE_LABELS[g] || (g ? g.charAt(0).toUpperCase() + g.slice(1) : "");
 const escapeHtml = (s) => String(s || "")
   .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
