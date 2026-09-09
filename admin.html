@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin | JT Cover Studio</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root { --bg:#f6f1e8; --ink:#1c1814; --muted:#6e655b; --line:rgba(28,24,20,.12); --gold:#c4a46c; --wine:#7a3030; --card:#fffdf8; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:Outfit,sans-serif; background:var(--bg); color:var(--ink); }
+    button, input, select, textarea { font-family:inherit; }
+    .login { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
+    .login__card { width:100%; max-width:380px; background:var(--card); border:1px solid var(--line); border-radius:18px; padding:32px; }
+    .login__card img { width:56px; height:56px; border-radius:12px; margin-bottom:14px; }
+    .login__card h1 { font-size:1.4rem; margin-bottom:6px; }
+    .login__sub { color:var(--muted); margin-bottom:22px; font-size:.92rem; }
+    .field { margin-bottom:14px; }
+    .field label { display:block; font-size:.78rem; font-weight:600; margin-bottom:6px; }
+    .field input, .field select, .field textarea { width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:10px; background:#fff; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; padding:12px 18px; border:0; border-radius:999px; cursor:pointer; font-weight:600; font-size:.85rem; }
+    .btn--primary { background:var(--ink); color:#f6f1e8; width:100%; }
+    .btn--ghost { background:transparent; border:1px solid var(--line); }
+    .btn--danger { background:#7a3030; color:#fff; }
+    .login__note { min-height:20px; font-size:.85rem; color:#c45c4a; margin:8px 0; }
+    .app { display:grid; grid-template-columns:240px 1fr; min-height:100vh; }
+    .sidebar { background:#1c1814; color:#f6f1e8; padding:24px 16px; display:flex; flex-direction:column; }
+    .sidebar__brand { display:flex; align-items:center; gap:10px; margin-bottom:28px; font-weight:600; }
+    .sidebar__brand img { width:36px; height:36px; border-radius:8px; }
+    .sidebar__nav { display:grid; gap:6px; }
+    .sidebar__nav button { text-align:left; background:transparent; color:#c9c0b4; border:0; padding:10px 12px; border-radius:10px; cursor:pointer; }
+    .sidebar__nav button.active, .sidebar__nav button:hover { background:rgba(255,255,255,.08); color:#fff; }
+    .badge { background:var(--gold); color:#1c1814; border-radius:999px; padding:1px 7px; font-size:.72rem; margin-left:6px; }
+    .sidebar__foot { margin-top:auto; display:grid; gap:8px; }
+    .sidebar__foot a, .sidebar__foot button { color:#c9c0b4; background:none; border:0; text-align:left; cursor:pointer; text-decoration:none; font-size:.9rem; }
+    .main { padding:28px; }
+    .main__head { display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; }
+    .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:24px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; }
+    .card b { font-size:1.6rem; display:block; }
+    .toolbar { display:flex; justify-content:space-between; gap:12px; margin-bottom:16px; }
+    table { width:100%; border-collapse:collapse; background:var(--card); border-radius:14px; overflow:hidden; }
+    th, td { padding:12px 14px; text-align:left; border-bottom:1px solid var(--line); font-size:.9rem; vertical-align:middle; }
+    th { font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+    .thumb { width:48px; height:72px; object-fit:cover; border-radius:4px; background:#ddd; }
+    .thumb--wide { width:72px; height:48px; }
+    .row-actions { display:flex; gap:8px; }
+    .muted { color:var(--muted); }
+    .modal { position:fixed; inset:0; display:none; align-items:center; justify-content:center; padding:20px; z-index:20; }
+    .modal.open { display:flex; }
+    .modal__backdrop { position:absolute; inset:0; background:rgba(28,24,20,.55); }
+    .modal__card { position:relative; background:#fff; width:min(520px,100%); border-radius:16px; padding:22px; max-height:90vh; overflow:auto; }
+    .preview { max-width:160px; margin-top:8px; border-radius:8px; }
+    .toast { position:fixed; bottom:20px; right:20px; background:#1c1814; color:#fff; padding:12px 16px; border-radius:10px; display:none; }
+    .toast.show { display:block; }
+    @media (max-width:800px) {
+      .app { grid-template-columns:1fr; }
+      .sidebar { flex-direction:row; flex-wrap:wrap; gap:10px; }
+      .sidebar__nav { display:flex; flex-wrap:wrap; }
+      .cards { grid-template-columns:1fr; }
+      .sidebar__foot { margin-top:0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="login" id="loginView">
+    <form class="login__card" id="loginForm">
+      <img src="assets/logo-nav.png" alt="JT Cover Studio" />
+      <h1>Admin</h1>
+      <p class="login__sub">Sign in to add covers, testimonials, and read enquiries.</p>
+      <div class="field">
+        <label>Username</label>
+        <input id="loginUser" value="admin" autocomplete="username" />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input id="loginPass" type="password" autocomplete="current-password" />
+      </div>
+      <p class="login__note" id="loginNote"></p>
+      <button class="btn btn--primary" type="submit">Sign In</button>
+    </form>
+  </div>
+
+  <div class="app" id="appView" hidden>
+    <aside class="sidebar">
+      <div class="sidebar__brand">
+        <img src="assets/logo-nav.png" alt="" />
+        <span>JT Cover Studio</span>
+      </div>
+      <nav class="sidebar__nav">
+        <button data-view="dashboard" class="active">Dashboard</button>
+        <button data-view="covers">Covers</button>
+        <button data-view="testimonials">Testimonials</button>
+        <button data-view="enquiries">Enquiries <span class="badge" id="enqBadge" hidden>0</span></button>
+      </nav>
+      <div class="sidebar__foot">
+        <a href="/" target="_blank">View website ↗</a>
+        <button id="logoutBtn">Log out</button>
+      </div>
+    </aside>
+    <main class="main">
+      <div class="main__head"><h2 id="viewTitle">Dashboard</h2></div>
+      <div id="viewContent"></div>
+    </main>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__card">
+      <h3 id="modalTitle" style="margin-bottom:16px">Edit</h3>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="admin.js"></script>
+</body>
+</html>
