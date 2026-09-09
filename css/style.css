@@ -472,6 +472,16 @@ ul { list-style: none; }
   font-size: 0.92rem;
 }
 .testimonial-card span { color: var(--muted); font-size: 0.82rem; }
+.testimonial-card--image {
+  padding: 0;
+  overflow: hidden;
+  background: #fff;
+}
+.testimonial-card__image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
 
 .contact__grid {
   display: grid;
