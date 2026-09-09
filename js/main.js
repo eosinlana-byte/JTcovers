@@ -1,4 +1,4 @@
-const COVERS = [
+const SAMPLE_COVERS = [
   { title: "The Last Letter", author: "Ella Morgan", genre: "romance", image: "assets/covers/the-last-letter.jpg" },
   { title: "Crown of Embers", author: "S. V. Hale", genre: "fantasy", image: "assets/covers/crown-of-embers.jpg" },
   { title: "Silent Witness", author: "Noah Reed", genre: "thriller", image: "assets/covers/silent-witness.jpg" },
@@ -9,20 +9,37 @@ const COVERS = [
   { title: "Velvet Oath", author: "C. R. Vane", genre: "romance", image: "assets/covers/velvet-oath.jpg" }
 ];
 
-const genreLabel = (g) => g.charAt(0).toUpperCase() + g.slice(1);
+let COVERS = SAMPLE_COVERS.slice();
+let usingSamples = true;
+
+const genreLabel = (g) => (g ? g.charAt(0).toUpperCase() + g.slice(1) : "");
+const escapeHtml = (s) => String(s || "")
+  .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 function renderCovers(filter = "all") {
   const grid = document.getElementById("portfolioGrid");
   grid.innerHTML = COVERS.map((c, i) => `
     <article class="cover-card${filter !== "all" && c.genre !== filter ? " is-hidden" : ""}" data-index="${i}">
       <div class="cover-card__media">
-        <img src="${c.image}" alt="${c.title} book cover" loading="lazy" />
+        <img src="${escapeHtml(c.image)}" alt="${escapeHtml(c.title)} book cover" loading="lazy" />
       </div>
       <div class="cover-card__body">
-        <p class="cover-card__genre">${genreLabel(c.genre)}</p>
-        <h3 class="cover-card__title">${c.title}</h3>
-        <p class="cover-card__author">${c.author}</p>
+        <p class="cover-card__genre">${escapeHtml(genreLabel(c.genre))}</p>
+        <h3 class="cover-card__title">${escapeHtml(c.title)}</h3>
+        <p class="cover-card__author">${escapeHtml(c.author)}</p>
       </div>
+    </article>
+  `).join("");
+}
+
+function renderTestimonials(items) {
+  const grid = document.querySelector(".testimonials__grid");
+  if (!grid || !items || !items.length) return;
+  const sub = document.querySelector("#testimonials .section-sub");
+  if (sub) sub.textContent = "Notes from authors I’ve worked with.";
+  grid.innerHTML = items.filter((t) => t.image).map((t, i) => `
+    <article class="testimonial-card testimonial-card--image">
+      <img class="testimonial-card__image" src="${escapeHtml(t.image)}" alt="Client testimonial ${i + 1}" loading="lazy" />
     </article>
   `).join("");
 }
@@ -123,7 +140,7 @@ function initForm() {
     });
   });
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     note.textContent = "";
     note.className = "contact__form-note";
@@ -145,17 +162,51 @@ function initForm() {
       return;
     }
 
-    const subject = encodeURIComponent(`Cover enquiry: ${form.subject.value.trim()}`);
-    const body = encodeURIComponent(
-      `Name: ${form.name.value.trim()}\nEmail: ${form.email.value.trim()}\nService: ${form.service.value}\n\n${form.message.value.trim()}`
-    );
-
     btn.disabled = true;
-    window.location.href = `mailto:joannathompson616@gmail.com?subject=${subject}&body=${body}`;
-    note.textContent = "Opening your email app… if nothing happens, email joannathompson616@gmail.com.";
-    note.classList.add("success");
-    setTimeout(() => { btn.disabled = false; }, 1200);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name.value.trim(),
+          email: form.email.value.trim(),
+          service: form.service.value,
+          subject: form.subject.value.trim(),
+          message: form.message.value.trim(),
+          website: form.website.value
+        })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.success) throw new Error(data.error || "Could not send.");
+      form.reset();
+      note.textContent = "Sent. I’ll get back to you soon.";
+      note.classList.add("success");
+    } catch (err) {
+      note.textContent = err.message || "Could not send. Email joannathompson616@gmail.com.";
+      note.classList.add("error");
+    } finally {
+      btn.disabled = false;
+    }
   });
+}
+
+async function loadContent() {
+  try {
+    const res = await fetch("/api/content");
+    const data = await res.json();
+    if (data.covers && data.covers.length) {
+      COVERS = data.covers;
+      usingSamples = false;
+      const sub = document.querySelector("#portfolio .section-sub");
+      if (sub) sub.textContent = "A selection of recent cover work. Click any cover to view it larger.";
+      renderCovers();
+    }
+    if (data.testimonials && data.testimonials.length) {
+      renderTestimonials(data.testimonials);
+    }
+  } catch {
+    /* keep samples */
+  }
 }
 
 renderCovers();
@@ -164,3 +215,4 @@ initFilters();
 initModal();
 initReveal();
 initForm();
+loadContent();
