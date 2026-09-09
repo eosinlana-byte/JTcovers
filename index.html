@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JT Cover Studio | Book Cover Design</title>
+  <meta name="description" content="JT Cover Studio — book cover design by Joanna Thompson. Custom covers, series branding, and premades for authors. Designing stories that stand out." />
+  <meta name="author" content="Joanna Thompson" />
+  <meta name="theme-color" content="#F6F1E8" />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="JT Cover Studio | Book Cover Design" />
+  <meta property="og:description" content="Designing stories that stand out. Custom book covers for authors." />
+  <meta property="og:image" content="assets/logo.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="nav" id="nav">
+    <div class="nav__inner container">
+      <a href="#home" class="nav__brand" aria-label="JT Cover Studio, home">
+        <img src="assets/logo-nav.png" alt="JT Cover Studio logo" class="nav__logo" />
+        <span class="nav__name">JT Cover Studio</span>
+      </a>
+
+      <nav class="nav__links" id="navLinks" aria-label="Primary">
+        <a href="#home">Home</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="#contact" class="nav__cta">Contact</a>
+      </nav>
+
+      <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero__inner container">
+        <div class="hero__copy">
+          <p class="hero__eyebrow reveal">Book Cover Designer</p>
+          <h1 class="hero__title reveal">JT Cover<br />Studio</h1>
+          <p class="hero__headline reveal">Designing Stories That Stand Out</p>
+          <p class="hero__sub reveal">
+            Custom book covers for authors who want their story seen.
+            Typography, mood, and market-ready design — so your book earns the click.
+          </p>
+          <div class="hero__cta reveal">
+            <a href="#portfolio" class="btn btn--primary">View Portfolio</a>
+            <a href="#contact" class="btn btn--ghost">Work With Me</a>
+          </div>
+        </div>
+
+        <div class="hero__stage reveal" aria-hidden="true">
+          <img class="hero__cover hero__cover--1" src="assets/covers/velvet-oath.jpg" alt="" />
+          <img class="hero__cover hero__cover--2" src="assets/covers/crown-of-embers.jpg" alt="" />
+          <img class="hero__cover hero__cover--3" src="assets/covers/the-last-letter.jpg" alt="" />
+        </div>
+      </div>
+    </section>
+
+    <section class="portfolio section" id="portfolio">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="section-eyebrow">Portfolio</p>
+          <h2 class="section-title">Selected Covers</h2>
+          <p class="section-sub">
+            Layout samples for now — your real covers go here next.
+            Click any cover to view it larger.
+          </p>
+        </div>
+
+        <div class="portfolio__filters reveal" id="portfolioFilters" role="tablist">
+          <button class="filter filter--active" data-filter="all" role="tab" aria-selected="true">All</button>
+          <button class="filter" data-filter="romance" role="tab">Romance</button>
+          <button class="filter" data-filter="fantasy" role="tab">Fantasy</button>
+          <button class="filter" data-filter="thriller" role="tab">Thriller</button>
+          <button class="filter" data-filter="contemporary" role="tab">Contemporary</button>
+          <button class="filter" data-filter="mystery" role="tab">Mystery</button>
+        </div>
+
+        <div class="portfolio__grid" id="portfolioGrid"></div>
+      </div>
+    </section>
+
+    <section class="about section section--alt" id="about">
+      <div class="container about__grid">
+        <div class="about__media reveal">
+          <div class="about__frame">
+            <img src="assets/about-portrait.jpg" alt="Joanna Thompson, book cover designer" />
+          </div>
+          <div class="about__accent" aria-hidden="true"></div>
+        </div>
+        <div class="about__text reveal">
+          <p class="section-eyebrow">About</p>
+          <h2 class="section-title">The Designer Behind the Covers</h2>
+          <p class="about__intro">
+            I’m Joanna Thompson, founder of JT Cover Studio.
+            I design book covers that sell the feeling of a story before a single page is read.
+          </p>
+          <p>
+            Authors come to me when they need a cover that looks traditionally published —
+            strong type, a clear mood, and a design that holds up as a tiny thumbnail and a full print wrap.
+          </p>
+          <p>
+            Every project starts with your genre, your reader, and the one image that should stop the scroll.
+            Then we refine until it feels inevitable.
+          </p>
+          <dl class="about__points">
+            <div class="point">
+              <dt>Focus</dt>
+              <dd>Custom covers, series branding, and market-ready premades.</dd>
+            </div>
+            <div class="point">
+              <dt>Approach</dt>
+              <dd>Story first. Then type, color, and composition that match the shelf.</dd>
+            </div>
+            <div class="point">
+              <dt>For</dt>
+              <dd>Indie and hybrid authors who want their book to look like it belongs next to the bestsellers.</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="services section" id="services">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="section-eyebrow">Services</p>
+          <h2 class="section-title">How We Can Work Together</h2>
+          <p class="section-sub">Clear packages. Finished files ready for ebook, print, and promo.</p>
+        </div>
+
+        <div class="services__grid">
+          <article class="service-card reveal">
+            <div class="service-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="6" y="3" width="12" height="18" rx="1.2"/><path d="M9 7h6M9 11h6"/></svg>
+            </div>
+            <h3>Custom Cover</h3>
+            <p class="service-card__tagline">A one-of-a-kind cover built around your story.</p>
+            <ul>
+              <li>Mood board &amp; concept</li>
+              <li>Typography + imagery</li>
+              <li>Ebook + print wrap</li>
+            </ul>
+            <a href="#contact" class="btn btn--ghost" data-preselect="Custom Cover">Enquire</a>
+          </article>
+
+          <article class="service-card reveal">
+            <div class="service-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+            </div>
+            <h3>Premade Covers</h3>
+            <p class="service-card__tagline">Ready designs, customized with your title and name.</p>
+            <ul>
+              <li>Faster turnaround</li>
+              <li>Title &amp; author swap</li>
+              <li>Sold once, then yours</li>
+            </ul>
+            <a href="#contact" class="btn btn--ghost" data-preselect="Premade Cover">Enquire</a>
+          </article>
+
+          <article class="service-card reveal">
+            <div class="service-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="7" height="14" rx="1"/><rect x="14" y="5" width="7" height="14" rx="1"/></svg>
+            </div>
+            <h3>Series Branding</h3>
+            <p class="service-card__tagline">A look that ties every book in the series together.</p>
+            <ul>
+              <li>Matching type system</li>
+              <li>Spine &amp; box-set design</li>
+              <li>Room to grow the series</li>
+            </ul>
+            <a href="#contact" class="btn btn--ghost" data-preselect="Series Branding">Enquire</a>
+          </article>
+
+          <article class="service-card reveal">
+            <div class="service-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 1.5"/></svg>
+            </div>
+            <h3>Audiobook &amp; Promo</h3>
+            <p class="service-card__tagline">Square audiobook art and extra graphics for launch.</p>
+            <ul>
+              <li>Audiobook thumbnail</li>
+              <li>Cover reveal graphics</li>
+              <li>Ad &amp; social crops</li>
+            </ul>
+            <a href="#contact" class="btn btn--ghost" data-preselect="Audiobook & Promo">Enquire</a>
+          </article>
+        </div>
+
+        <div class="process reveal">
+          <h3 class="process__title">The process</h3>
+          <ol class="process__list">
+            <li>
+              <span>01</span>
+              <strong>Brief</strong>
+              <p>You send the story, genre, comps, and what you love (and don’t).</p>
+            </li>
+            <li>
+              <span>02</span>
+              <strong>Concept</strong>
+              <p>I explore direction and present a cover concept built for your market.</p>
+            </li>
+            <li>
+              <span>03</span>
+              <strong>Refine</strong>
+              <p>We tighten type, color, and details until it feels like the book.</p>
+            </li>
+            <li>
+              <span>04</span>
+              <strong>Deliver</strong>
+              <p>You get print, ebook, and web files — ready to publish.</p>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="testimonials section section--alt" id="testimonials">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="section-eyebrow">Kind Words</p>
+          <h2 class="section-title">What Authors Say</h2>
+          <p class="section-sub">Placeholder quotes for layout. We’ll swap in your real testimonials and screenshots.</p>
+        </div>
+        <div class="testimonials__grid">
+          <blockquote class="testimonial-card reveal">
+            <p>“The cover looked traditionally published from the first draft. I finally had something I was proud to put on ads.”</p>
+            <footer>
+              <cite>A. Harper</cite>
+              <span>Romance author</span>
+            </footer>
+          </blockquote>
+          <blockquote class="testimonial-card reveal">
+            <p>“Joanna understood the mood immediately. The series now looks like one world, not four random books.”</p>
+            <footer>
+              <cite>M. Cole</cite>
+              <span>Fantasy author</span>
+            </footer>
+          </blockquote>
+          <blockquote class="testimonial-card reveal">
+            <p>“Fast, clear, and the typography is chef’s kiss. My thumbnail finally reads at phone size.”</p>
+            <footer>
+              <cite>R. Dane</cite>
+              <span>Thriller author</span>
+            </footer>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact section" id="contact">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="section-eyebrow">Contact</p>
+          <h2 class="section-title">Let’s Design Your Cover</h2>
+          <p class="section-sub">Tell me about the book. I’ll get back to you as soon as I can.</p>
+        </div>
+
+        <div class="contact__grid">
+          <div class="contact__info reveal">
+            <h3>Get in touch</h3>
+            <p>For custom covers, premades, series work, or a quick question — use the form or email me directly.</p>
+            <ul class="contact__details">
+              <li>
+                <span class="icon-svg" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>
+                </span>
+                <a href="mailto:joannathompson616@gmail.com">joannathompson616@gmail.com</a>
+              </li>
+            </ul>
+            <div class="social">
+              <a href="https://www.instagram.com/joannabookcovers/" target="_blank" rel="noopener" aria-label="Instagram">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"/></svg>
+              </a>
+              <a href="https://www.facebook.com/profile.php?id=61592068419059" target="_blank" rel="noopener" aria-label="Facebook">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h3l1-3h-4V10c0-.6.4-1 1-1z"/></svg>
+              </a>
+              <a href="https://x.com/Joannacovers" target="_blank" rel="noopener" aria-label="X / Twitter">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.7 10.3 21 3h-1.9l-5.4 6.3L9.2 3H3l6.6 9.6L3 21h1.9l5.8-6.8L14.7 21H21l-6.3-10.7Zm-2 2.4-.7-1L5.6 4.2h2.3l4.5 6.4.7 1 5.9 8.3h-2.3l-5-7.2Z"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <form class="contact__form reveal" id="contactForm" novalidate>
+            <div class="field">
+              <label for="name">Full Name *</label>
+              <input type="text" id="name" name="name" autocomplete="name" maxlength="100" placeholder="Your name" required />
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" autocomplete="email" maxlength="200" placeholder="you@example.com" required />
+              </div>
+              <div class="field">
+                <label for="service">Service *</label>
+                <select id="service" name="service" required>
+                  <option value="" selected disabled>Select a service</option>
+                  <option>Custom Cover</option>
+                  <option>Premade Cover</option>
+                  <option>Series Branding</option>
+                  <option>Audiobook &amp; Promo</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="subject">Book title / subject *</label>
+              <input type="text" id="subject" name="subject" maxlength="150" placeholder="What’s the book called?" required />
+            </div>
+            <div class="field">
+              <label for="message">Message *</label>
+              <textarea id="message" name="message" rows="5" maxlength="5000" placeholder="Genre, blurb, comps, deadline — whatever helps." required></textarea>
+            </div>
+            <div class="field field--hp" aria-hidden="true">
+              <label for="website">Website</label>
+              <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+            </div>
+            <button type="submit" class="btn btn--primary btn--block" id="submitBtn">
+              <span class="btn__label">Send Enquiry</span>
+            </button>
+            <p class="contact__form-note" id="formNote" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <img src="assets/logo-nav.png" alt="" class="footer__logo" />
+          <h3 class="footer__name">JT Cover Studio</h3>
+          <p class="footer__tag">Designing Stories That Stand Out</p>
+        </div>
+        <nav class="footer__nav" aria-label="Footer">
+          <h4>Navigate</h4>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="footer__nav">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="#services">Custom Cover</a></li>
+            <li><a href="#services">Premades</a></li>
+            <li><a href="#services">Series Branding</a></li>
+            <li><a href="#services">Audiobook &amp; Promo</a></li>
+          </ul>
+        </div>
+        <div class="footer__nav">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="https://www.instagram.com/joannabookcovers/" target="_blank" rel="noopener">Instagram</a></li>
+            <li><a href="https://www.facebook.com/profile.php?id=61592068419059" target="_blank" rel="noopener">Facebook</a></li>
+            <li><a href="https://x.com/Joannacovers" target="_blank" rel="noopener">X / Twitter</a></li>
+          </ul>
+          <a href="mailto:joannathompson616@gmail.com" class="footer__email">joannathompson616@gmail.com</a>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>© 2026 JT Cover Studio. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="modal" id="coverModal" role="dialog" aria-modal="true" aria-label="Cover preview">
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__dialog">
+      <button class="modal__close" data-close aria-label="Close">&times;</button>
+      <figure class="modal__cover">
+        <img id="modalImage" alt="" />
+        <figcaption id="modalCaption"></figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
