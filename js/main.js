@@ -19,7 +19,6 @@ const GENRE_LABELS = {
   horror: "Horror",
   crime: "Crime",
   thriller: "Thriller",
-  mystery: "Mystery",
   "self-help": "Self-Help",
   memoir: "Memoir"
 };
