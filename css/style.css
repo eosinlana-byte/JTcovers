@@ -118,12 +118,12 @@ ul { list-style: none; }
   font-weight: 600;
   letter-spacing: 0.02em;
 }
-.nav__links { display: flex; align-items: center; gap: 26px; }
+.nav__links { display: flex; align-items: center; gap: 14px; }
 .nav__links a {
   position: relative;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--muted);
   transition: color 0.25s ease;
