@@ -108,9 +108,11 @@ ul { list-style: none; }
 }
 .nav__brand { display: flex; align-items: center; gap: 12px; }
 .nav__logo {
-  width: 42px; height: 42px;
-  border-radius: 10px;
+  width: 52px; height: 52px;
+  border-radius: 8px;
   object-fit: cover;
+  image-rendering: auto;
+  box-shadow: 0 0 0 1px rgba(28, 24, 20, 0.12);
 }
 .nav__name {
   font-family: var(--font-display);
