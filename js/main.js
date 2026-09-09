@@ -109,7 +109,7 @@ function initModal() {
     const cover = COVERS[Number(card.dataset.index)];
     img.src = cover.image;
     img.alt = cover.title;
-    cap.textContent = `${cover.title} — ${cover.author}`;
+    cap.textContent = `${cover.title} - ${cover.author}`;
     modal.classList.add("is-open");
   });
 
