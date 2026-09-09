@@ -174,8 +174,8 @@ async function renderCovers() {
           <tr>
             <td>${r.image ? `<img class="thumb" src="${r.image}" alt="">` : ""}</td>
             <td>${r.title}</td>
-            <td>${r.author || "—"}</td>
-            <td>${r.genre || "—"}</td>
+            <td>${r.author || "-"}</td>
+            <td>${r.genre || "-"}</td>
             <td class="row-actions">
               <button class="btn btn--ghost" data-edit="${r.id}">Edit</button>
               <button class="btn btn--danger" data-del="${r.id}">Delete</button>
@@ -302,7 +302,7 @@ async function renderEnquiries() {
         ${rows.map((r) => `
           <tr>
             <td><b>${r.name}</b><br><a href="mailto:${r.email}">${r.email}</a><br><span class="muted">${new Date(r.created_at).toLocaleString()}</span></td>
-            <td>${r.service || "—"}</td>
+            <td>${r.service || "-"}</td>
             <td>${r.subject}<br><span class="muted">${(r.message || "").slice(0, 80)}</span></td>
             <td class="row-actions">
               <button class="btn btn--ghost" data-open="${r.id}">Open</button>
