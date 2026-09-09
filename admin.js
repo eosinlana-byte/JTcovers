@@ -49,7 +49,10 @@ function showLogin() {
 
 $("#loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
-  $("#loginNote").textContent = "";
+  const btn = e.target.querySelector("button[type=submit]");
+  $("#loginNote").textContent = "Signing in…";
+  $("#loginNote").style.color = "#6e655b";
+  if (btn) { btn.disabled = true; btn.textContent = "Signing in…"; }
   try {
     await api("/api/admin/login", {
       method: "POST",
@@ -60,7 +63,10 @@ $("#loginForm").addEventListener("submit", async (e) => {
     });
     showApp();
   } catch (err) {
-    $("#loginNote").textContent = err.message;
+    $("#loginNote").style.color = "#c45c4a";
+    $("#loginNote").textContent = err.message || "Could not sign in.";
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = "Sign In"; }
   }
 });
 
