@@ -38,9 +38,9 @@ function verifyToken(token) {
   } catch { return false; }
 }
 function checkPassword(pw) {
-  const a = Buffer.from(String(pw));
-  const b = Buffer.from(ADMIN_PASSWORD);
-  if (a.length !== b.length) return false;
+  const a = Buffer.from(String(pw || "").trim());
+  const b = Buffer.from(String(ADMIN_PASSWORD || "").trim());
+  if (!a.length || a.length !== b.length) return false;
   return crypto.timingSafeEqual(a, b);
 }
 function getCookie(req, name) {
@@ -98,7 +98,16 @@ const VALID_SERVICES = new Set(["Custom Cover", "Premade Cover", "Series Brandin
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const isValidEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);
 
-app.get("/api/health", (_req, res) => res.json({ ok: true, db: hasDb() }));
+app.get("/api/health", async (_req, res) => {
+  if (!hasDb()) return res.json({ ok: true, db: false });
+  try {
+    await query("SELECT 1 AS ok");
+    res.json({ ok: true, db: true });
+  } catch (err) {
+    console.error("[health]", err.message);
+    res.json({ ok: true, db: false, error: err.message });
+  }
+});
 
 app.get("/media/:id", async (req, res) => {
   try {
@@ -187,7 +196,7 @@ app.post("/api/contact", async (req, res) => {
 app.post("/api/admin/login", (req, res) => {
   const { user, password } = req.body || {};
   if (user === ADMIN_USER && checkPassword(password)) {
-    res.setHeader("Set-Cookie", `${COOKIE}=${makeToken()}; HttpOnly; Path=/; SameSite=Lax; Max-Age=${TOKEN_TTL / 1000}`);
+    res.setHeader("Set-Cookie", `${COOKIE}=${makeToken()}; HttpOnly; Path=/; SameSite=Lax; Secure; Max-Age=${TOKEN_TTL / 1000}`);
     return res.json({ success: true });
   }
   res.status(401).json({ success: false, error: "Invalid username or password." });
@@ -202,44 +211,57 @@ app.get("/api/admin/check", (req, res) => {
   res.json({ authenticated: verifyToken(getCookie(req, COOKIE)) });
 });
 
-app.get("/api/admin/enquiries", requireAdmin, async (_req, res) => {
+app.get("/api/admin/enquiries", requireAdmin, wrap(async (_req, res) => {
   res.json(await query("SELECT * FROM enquiries ORDER BY id DESC"));
-});
-app.patch("/api/admin/enquiries/:id", requireAdmin, async (req, res) => {
+}));
+app.patch("/api/admin/enquiries/:id", requireAdmin, wrap(async (req, res) => {
   const { status } = req.body || {};
   if (!["new", "read"].includes(status)) return res.status(400).json({ success: false, error: "Invalid status" });
   await query("UPDATE enquiries SET status = $1 WHERE id = $2", [status, req.params.id]);
   res.json({ success: true });
-});
-app.delete("/api/admin/enquiries/:id", requireAdmin, async (req, res) => {
+}));
+app.delete("/api/admin/enquiries/:id", requireAdmin, wrap(async (req, res) => {
   await query("DELETE FROM enquiries WHERE id = $1", [req.params.id]);
   res.json({ success: true });
-});
+}));
+
+function wrap(fn) {
+  return async (req, res) => {
+    try {
+      await fn(req, res);
+    } catch (err) {
+      console.error("[admin]", err.message);
+      if (!res.headersSent) {
+        res.status(500).json({ success: false, error: "Database error. Check DATABASE_URL on Render." });
+      }
+    }
+  };
+}
 
 function crud(base, table, fields, required) {
-  app.get(`/api/admin/${base}`, requireAdmin, async (_req, res) => {
+  app.get(`/api/admin/${base}`, requireAdmin, wrap(async (_req, res) => {
     res.json(await query(`SELECT * FROM ${table} ORDER BY id DESC`));
-  });
-  app.delete(`/api/admin/${base}/:id`, requireAdmin, async (req, res) => {
+  }));
+  app.delete(`/api/admin/${base}/:id`, requireAdmin, wrap(async (req, res) => {
     await query(`DELETE FROM ${table} WHERE id = $1`, [req.params.id]);
     res.json({ success: true });
-  });
-  app.post(`/api/admin/${base}`, requireAdmin, async (req, res) => {
+  }));
+  app.post(`/api/admin/${base}`, requireAdmin, wrap(async (req, res) => {
     const r = {};
     for (const f of fields) r[f] = req.body[f] !== undefined ? String(req.body[f] ?? "").trim() : "";
     if (!r[required]) return res.status(400).json({ success: false, error: "Please fill the required fields." });
     const ph = fields.map((_, i) => `$${i + 1}`).join(",");
     const rows = await query(`INSERT INTO ${table} (${fields.join(",")}) VALUES (${ph}) RETURNING id`, fields.map((f) => r[f]));
     res.json({ success: true, id: rows[0].id });
-  });
-  app.put(`/api/admin/${base}/:id`, requireAdmin, async (req, res) => {
+  }));
+  app.put(`/api/admin/${base}/:id`, requireAdmin, wrap(async (req, res) => {
     const r = {};
     for (const f of fields) r[f] = req.body[f] !== undefined ? String(req.body[f] ?? "").trim() : "";
     if (!r[required]) return res.status(400).json({ success: false, error: "Please fill the required fields." });
     const set = fields.map((f, i) => `${f}=$${i + 1}`).join(",");
     await query(`UPDATE ${table} SET ${set} WHERE id=$${fields.length + 1}`, [...fields.map((f) => r[f]), req.params.id]);
     res.json({ success: true });
-  });
+  }));
 }
 
 crud("covers", "covers", ["title", "author", "genre", "image"], "image");
