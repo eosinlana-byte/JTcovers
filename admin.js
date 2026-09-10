@@ -289,7 +289,7 @@ async function renderTestimonials() {
   viewContent.innerHTML = `
     <div class="toolbar">
       <p class="muted">${rows.length} testimonial${rows.length === 1 ? "" : "s"}</p>
-      <button class="btn btn--primary" id="addBtn" style="width:auto">Add screenshot</button>
+      <button class="btn btn--primary" id="addBtn" style="width:auto">Add testimonial</button>
     </div>
     <table>
       <thead><tr><th></th><th>Name</th><th></th></tr></thead>
@@ -322,8 +322,9 @@ function openTModal(item) {
   bindSave(async () => {
     let image = $("#image").value;
     if ($("#file").files[0]) image = await uploadFile($("#file"));
-    if (!image) throw new Error("Please choose a screenshot first.");
-    const body = { image, quote: "", name: $("#name").value.trim(), role: $("#role").value.trim() };
+    const quote = ($("#quote") && $("#quote").value ? $("#quote").value.trim() : "");
+    if (!image && !quote) throw new Error("Add a screenshot or write a quote.");
+    const body = { image, quote, name: $("#name").value.trim(), role: $("#role").value.trim() };
     if (item) await api("/api/admin/testimonials/" + item.id, { method: "PUT", body: JSON.stringify(body) });
     else await api("/api/admin/testimonials", { method: "POST", body: JSON.stringify(body) });
     modal.classList.remove("open");
