@@ -86,15 +86,61 @@ modal.addEventListener("click", (e) => {
   if (e.target.closest("[data-close]")) modal.classList.remove("open");
 });
 
+async function compressImage(file) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((resolve, reject) => {
+      const el = new Image();
+      el.onload = () => resolve(el);
+      el.onerror = () => reject(new Error("Could not read that image. Use a JPG or PNG."));
+      el.src = url;
+    });
+    const maxW = 1400;
+    const scale = Math.min(1, maxW / img.width);
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(img.width * scale));
+    canvas.height = Math.max(1, Math.round(img.height * scale));
+    canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.84));
+    if (!blob) throw new Error("Could not process that image.");
+    return new File([blob], "cover.jpg", { type: "image/jpeg" });
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
 async function uploadFile(input) {
   const file = input.files && input.files[0];
   if (!file) return "";
+  const ready = await compressImage(file);
   const fd = new FormData();
-  fd.append("file", file);
+  fd.append("file", ready);
   const res = await fetch("/api/admin/upload", { method: "POST", body: fd, credentials: "same-origin" });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || "Upload failed");
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || "Upload failed. Try a smaller JPG.");
   return data.url;
+}
+
+function formError(msg) {
+  const el = $("#formError");
+  if (el) el.textContent = msg || "";
+  if (msg) toast(msg);
+}
+
+function bindSave(onSave) {
+  $("#editForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector("button[type=submit]");
+    formError("");
+    if (btn) { btn.disabled = true; btn.textContent = "Saving…"; }
+    try {
+      await onSave();
+    } catch (err) {
+      formError(err.message || "Could not save.");
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = "Save"; }
+    }
+  });
 }
 
 function openModal(title, html) {
@@ -147,13 +193,14 @@ function coverForm(item = {}) {
       <div class="field"><label>Genre</label>
         <select id="genre">
           ${["christian","romance"].map((g) => {
-            const label = g === "self-help" ? "Self-Help" : g[0].toUpperCase() + g.slice(1);
+            const label = g[0].toUpperCase() + g.slice(1);
             return `<option value="${g}" ${item.genre === g ? "selected" : ""}>${label}</option>`;
           }).join("")}
         </select>
       </div>
+      <p class="form-error" id="formError"></p>
       <div class="row-actions">
-        <button class="btn btn--primary" type="submit">Save</button>
+        <button class="btn btn--primary" type="submit" style="width:auto">Save</button>
         <button class="btn btn--ghost" type="button" data-close>Cancel</button>
       </div>
     </form>
@@ -198,27 +245,24 @@ async function renderCovers() {
 
 function openCoverModal(item) {
   openModal(item ? "Edit cover" : "Add cover", coverForm(item || {}));
-  $("#editForm").onsubmit = async (e) => {
-    e.preventDefault();
-    try {
-      let image = $("#image").value;
-      if ($("#file").files[0]) image = await uploadFile($("#file"));
-      if (!image) return toast("Please upload a cover image.");
-      const body = {
-        title: $("#title").value.trim(),
-        author: $("#author").value.trim(),
-        genre: $("#genre").value,
-        image,
-      };
-      if (item) await api("/api/admin/covers/" + item.id, { method: "PUT", body: JSON.stringify(body) });
-      else await api("/api/admin/covers", { method: "POST", body: JSON.stringify(body) });
-      modal.classList.remove("open");
-      toast("Saved");
-      renderCovers();
-    } catch (err) {
-      toast(err.message);
-    }
-  };
+  bindSave(async () => {
+    let image = $("#image").value;
+    if ($("#file").files[0]) image = await uploadFile($("#file"));
+    if (!image) throw new Error("Please choose a cover image first.");
+    const title = $("#title").value.trim();
+    if (!title) throw new Error("Please enter a title.");
+    const body = {
+      title,
+      author: $("#author").value.trim(),
+      genre: $("#genre").value,
+      image,
+    };
+    if (item) await api("/api/admin/covers/" + item.id, { method: "PUT", body: JSON.stringify(body) });
+    else await api("/api/admin/covers", { method: "POST", body: JSON.stringify(body) });
+    modal.classList.remove("open");
+    toast("Saved");
+    renderCovers();
+  });
 }
 
 function testimonialForm(item = {}) {
@@ -229,8 +273,9 @@ function testimonialForm(item = {}) {
       <input type="hidden" id="image" value="${item.image || ""}" />
       <div class="field"><label>Name (optional)</label><input id="name" value="${item.name || ""}" /></div>
       <div class="field"><label>Role (optional)</label><input id="role" value="${item.role || ""}" /></div>
+      <p class="form-error" id="formError"></p>
       <div class="row-actions">
-        <button class="btn btn--primary" type="submit">Save</button>
+        <button class="btn btn--primary" type="submit" style="width:auto">Save</button>
         <button class="btn btn--ghost" type="button" data-close>Cancel</button>
       </div>
     </form>
@@ -272,22 +317,17 @@ async function renderTestimonials() {
 
 function openTModal(item) {
   openModal(item ? "Edit testimonial" : "Add testimonial", testimonialForm(item || {}));
-  $("#editForm").onsubmit = async (e) => {
-    e.preventDefault();
-    try {
-      let image = $("#image").value;
-      if ($("#file").files[0]) image = await uploadFile($("#file"));
-      if (!image) return toast("Please upload a screenshot.");
-      const body = { image, quote: "", name: $("#name").value.trim(), role: $("#role").value.trim() };
-      if (item) await api("/api/admin/testimonials/" + item.id, { method: "PUT", body: JSON.stringify(body) });
-      else await api("/api/admin/testimonials", { method: "POST", body: JSON.stringify(body) });
-      modal.classList.remove("open");
-      toast("Saved");
-      renderTestimonials();
-    } catch (err) {
-      toast(err.message);
-    }
-  };
+  bindSave(async () => {
+    let image = $("#image").value;
+    if ($("#file").files[0]) image = await uploadFile($("#file"));
+    if (!image) throw new Error("Please choose a screenshot first.");
+    const body = { image, quote: "", name: $("#name").value.trim(), role: $("#role").value.trim() };
+    if (item) await api("/api/admin/testimonials/" + item.id, { method: "PUT", body: JSON.stringify(body) });
+    else await api("/api/admin/testimonials", { method: "POST", body: JSON.stringify(body) });
+    modal.classList.remove("open");
+    toast("Saved");
+    renderTestimonials();
+  });
 }
 
 async function renderEnquiries() {

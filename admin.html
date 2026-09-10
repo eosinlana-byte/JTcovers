@@ -56,7 +56,8 @@
     .modal__backdrop { position:absolute; inset:0; background:rgba(28,24,20,.55); }
     .modal__card { position:relative; background:#fff; width:min(520px,100%); border-radius:16px; padding:22px; max-height:90vh; overflow:auto; }
     .preview { max-width:160px; margin-top:8px; border-radius:8px; }
-    .toast { position:fixed; bottom:20px; right:20px; background:#1c1814; color:#fff; padding:12px 16px; border-radius:10px; display:none; }
+    .toast { position:fixed; bottom:20px; right:20px; background:#1c1814; color:#fff; padding:12px 16px; border-radius:10px; display:none; z-index:50; }
+    .form-error { color:#c45c4a; font-size:.88rem; min-height:20px; margin:8px 0 12px; }
     .toast.show { display:block; }
     @media (max-width:800px) {
       .app { grid-template-columns:1fr; }
