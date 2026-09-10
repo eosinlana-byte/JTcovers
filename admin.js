@@ -146,7 +146,7 @@ function coverForm(item = {}) {
       <div class="field"><label>Author</label><input id="author" value="${item.author || ""}" /></div>
       <div class="field"><label>Genre</label>
         <select id="genre">
-          ${["christian","romance","fantasy","horror","crime","thriller","self-help","memoir"].map((g) => {
+          ${["christian","romance"].map((g) => {
             const label = g === "self-help" ? "Self-Help" : g[0].toUpperCase() + g.slice(1);
             return `<option value="${g}" ${item.genre === g ? "selected" : ""}>${label}</option>`;
           }).join("")}
