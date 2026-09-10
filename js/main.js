@@ -14,13 +14,7 @@ let usingSamples = true;
 
 const GENRE_LABELS = {
   christian: "Christian",
-  romance: "Romance",
-  fantasy: "Fantasy",
-  horror: "Horror",
-  crime: "Crime",
-  thriller: "Thriller",
-  "self-help": "Self-Help",
-  memoir: "Memoir"
+  romance: "Romance"
 };
 const genreLabel = (g) => GENRE_LABELS[g] || (g ? g.charAt(0).toUpperCase() + g.slice(1) : "");
 const escapeHtml = (s) => String(s || "")
