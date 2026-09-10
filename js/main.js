@@ -40,12 +40,25 @@ function renderTestimonials(items) {
   const grid = document.querySelector(".testimonials__grid");
   if (!grid || !items || !items.length) return;
   const sub = document.querySelector("#testimonials .section-sub");
-  if (sub) sub.textContent = "Notes from authors I’ve worked with.";
-  grid.innerHTML = items.filter((t) => t.image).map((t, i) => `
-    <article class="testimonial-card testimonial-card--image">
-      <img class="testimonial-card__image" src="${escapeHtml(t.image)}" alt="Client testimonial ${i + 1}" loading="lazy" />
-    </article>
-  `).join("");
+  if (sub) sub.textContent = "Notes from authors I have worked with.";
+  grid.innerHTML = items.map((t, i) => {
+    if (t.image) {
+      return `
+        <article class="testimonial-card testimonial-card--image">
+          <img class="testimonial-card__image" src="${escapeHtml(t.image)}" alt="Client testimonial ${i + 1}" loading="lazy" />
+          ${t.quote ? `<p class="testimonial-card__quote">${escapeHtml(t.quote)}</p>` : ""}
+          ${t.name ? `<footer><cite>${escapeHtml(t.name)}</cite><span>${escapeHtml(t.role || "")}</span></footer>` : ""}
+        </article>`;
+    }
+    return `
+      <blockquote class="testimonial-card">
+        <p>“${escapeHtml(t.quote)}”</p>
+        <footer>
+          <cite>${escapeHtml(t.name || "Author")}</cite>
+          <span>${escapeHtml(t.role || "")}</span>
+        </footer>
+      </blockquote>`;
+  }).join("");
 }
 
 function initNav() {
