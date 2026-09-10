@@ -249,7 +249,10 @@ function crud(base, table, fields, required) {
   app.post(`/api/admin/${base}`, requireAdmin, wrap(async (req, res) => {
     const r = {};
     for (const f of fields) r[f] = req.body[f] !== undefined ? String(req.body[f] ?? "").trim() : "";
-    if (!r[required]) return res.status(400).json({ success: false, error: "Please fill the required fields." });
+    if (table === "testimonials" && !r.image && !r.quote) {
+      return res.status(400).json({ success: false, error: "Add a screenshot or write a quote." });
+    }
+    if (required && !r[required]) return res.status(400).json({ success: false, error: "Please fill the required fields." });
     const ph = fields.map((_, i) => `$${i + 1}`).join(",");
     const rows = await query(`INSERT INTO ${table} (${fields.join(",")}) VALUES (${ph}) RETURNING id`, fields.map((f) => r[f]));
     res.json({ success: true, id: rows[0].id });
@@ -257,7 +260,10 @@ function crud(base, table, fields, required) {
   app.put(`/api/admin/${base}/:id`, requireAdmin, wrap(async (req, res) => {
     const r = {};
     for (const f of fields) r[f] = req.body[f] !== undefined ? String(req.body[f] ?? "").trim() : "";
-    if (!r[required]) return res.status(400).json({ success: false, error: "Please fill the required fields." });
+    if (table === "testimonials" && !r.image && !r.quote) {
+      return res.status(400).json({ success: false, error: "Add a screenshot or write a quote." });
+    }
+    if (required && !r[required]) return res.status(400).json({ success: false, error: "Please fill the required fields." });
     const set = fields.map((f, i) => `${f}=$${i + 1}`).join(",");
     await query(`UPDATE ${table} SET ${set} WHERE id=$${fields.length + 1}`, [...fields.map((f) => r[f]), req.params.id]);
     res.json({ success: true });
@@ -265,7 +271,7 @@ function crud(base, table, fields, required) {
 }
 
 crud("covers", "covers", ["title", "author", "genre", "image"], "image");
-crud("testimonials", "testimonials", ["image", "quote", "name", "role"], "image");
+crud("testimonials", "testimonials", ["image", "quote", "name", "role"], "");
 
 app.post("/api/admin/upload", requireAdmin, upload.single("file"), async (req, res) => {
   if (!req.file) return res.status(400).json({ success: false, error: "No file uploaded." });

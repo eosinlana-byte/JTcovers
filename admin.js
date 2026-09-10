@@ -268,9 +268,11 @@ function openCoverModal(item) {
 function testimonialForm(item = {}) {
   return `
     <form id="editForm">
-      <div class="field"><label>Screenshot *</label><input type="file" id="file" accept="image/*" /></div>
+      <p class="muted" style="margin-bottom:12px">Add a screenshot, a written quote, or both.</p>
+      <div class="field"><label>Screenshot (optional)</label><input type="file" id="file" accept="image/*" /></div>
       ${item.image ? `<img class="preview" src="${item.image}" alt="" />` : ""}
       <input type="hidden" id="image" value="${item.image || ""}" />
+      <div class="field"><label>Quote (optional)</label><textarea id="quote" rows="4">${item.quote || ""}</textarea></div>
       <div class="field"><label>Name (optional)</label><input id="name" value="${item.name || ""}" /></div>
       <div class="field"><label>Role (optional)</label><input id="role" value="${item.role || ""}" /></div>
       <p class="form-error" id="formError"></p>
@@ -294,8 +296,8 @@ async function renderTestimonials() {
       <tbody>
         ${rows.map((r) => `
           <tr>
-            <td>${r.image ? `<img class="thumb thumb--wide" src="${r.image}" alt="">` : ""}</td>
-            <td>${r.name || "Screenshot"}</td>
+            <td>${r.image ? `<img class="thumb thumb--wide" src="${r.image}" alt="">` : "<span class='muted'>Text</span>"}</td>
+            <td>${r.name || (r.quote ? r.quote.slice(0, 40) : "Testimonial")}</td>
             <td class="row-actions">
               <button class="btn btn--ghost" data-edit="${r.id}">Edit</button>
               <button class="btn btn--danger" data-del="${r.id}">Delete</button>
