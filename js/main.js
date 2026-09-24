@@ -199,7 +199,7 @@ function initForm() {
       note.textContent = "Sent. I’ll get back to you soon.";
       note.classList.add("success");
     } catch (err) {
-      note.textContent = err.message || "Could not send. Email joannathompson616@gmail.com.";
+      note.textContent = err.message || "Could not send. Email okolibooksdesign@gmail.com.";
       note.classList.add("error");
     } finally {
       btn.disabled = false;
