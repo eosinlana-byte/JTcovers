@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin
 Disallow: /admin.html
 
-Sitemap: https://jtcovers.onrender.com/sitemap.xml
+Sitemap: https://okolibookscreative.onrender.com/sitemap.xml
