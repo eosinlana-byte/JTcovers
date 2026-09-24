@@ -94,7 +94,16 @@ function getTransporter() {
   });
 }
 
-const VALID_SERVICES = new Set(["Custom Cover", "Series Branding", "Audiobook & Promo", "Other"]);
+const VALID_SERVICES = new Set([
+  "Book Cover Design",
+  "Flyer and Logo Design",
+  "Publishing Support",
+  "Book Editing",
+  "Ghostwriting",
+  "Movie Poster Design",
+  "Scriptwriting",
+  "Other"
+]);
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const isValidEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);
 
