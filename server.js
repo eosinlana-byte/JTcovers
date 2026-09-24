@@ -167,7 +167,7 @@ app.post("/api/contact", async (req, res) => {
   }
 
   const transporter = getTransporter();
-  const toAddress = process.env.MAIL_TO || "joannathompson616@gmail.com";
+  const toAddress = process.env.MAIL_TO || "okolibooksdesign@gmail.com";
   const fromAddress = process.env.MAIL_FROM || process.env.SMTP_USER || toAddress;
 
   if (transporter) {
@@ -181,7 +181,7 @@ app.post("/api/contact", async (req, res) => {
         <p style="white-space:pre-wrap">${esc(message)}</p>
       </div>`;
     transporter.sendMail({
-      from: `"JT Cover Studio" <${fromAddress}>`,
+      from: `"Okolibooks Creative" <${fromAddress}>`,
       to: toAddress,
       replyTo: email,
       subject: `Cover enquiry: ${subject}`,
@@ -303,6 +303,6 @@ init()
   .catch((err) => console.error("[db] init failed:", err.message))
   .finally(() => {
     app.listen(PORT, "0.0.0.0", () => {
-      console.log(`JT Cover Studio running on ${PORT}`);
+      console.log(`Okolibooks Creative running on ${PORT}`);
     });
   });
